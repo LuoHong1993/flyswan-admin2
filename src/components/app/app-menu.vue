@@ -102,7 +102,7 @@ export default {
           name: 'login_log',
           component: (resolve) => require(['components/log-components/login_log'], resolve),
           meta: { title: '登录日志' }
-        }, { path: 'http://www.baidu.com', name: 'Menu' }]
+        }]
       }]);
       this.$router.beforeEach((to, from, next) => {
         HeyUI.$LoadingBar.start();
@@ -129,7 +129,6 @@ export default {
     },
     trigger (data) {
       if (data.children.length > 0) return;
-      // this.$router.add([{path: '/role', name: 'role', component: (resolve) => require(['components/permission-components/role/role-list'], resolve),}]);
       this.$router.push({ name: data.key });
     }
   },

@@ -40,6 +40,7 @@
 <script>
 import { mapState } from 'vuex';
 import appLogo from './app-logo';
+import defalutcomponets from '../../js/config/defalut-componets';
 
 export default {
   props: {
@@ -47,7 +48,7 @@ export default {
   },
   data () {
     return {
-      // Menus: menuConfig
+      Menus: []
     };
   },
   watch: {
@@ -56,54 +57,24 @@ export default {
     }
   },
   mounted () {
+    this.initMenu();
     setTimeout(() => { this.menuSelect(); }, 2000);
   },
   computed: {
-    ...mapState(['Menus']),
     ...mapState(['siderCollapsed'])
   },
   methods: {
+    async initMenu () {
+      let menuData = await R.Menu.list();
+      if (menuData.ok && menuData.code === 0) {
+        this.Menus = menuData.data;
+      }
+    },
     menuSelect () {
       if (this.$route.name) {
         this.$refs.menu.select(this.$route.name);
       }
-      this.$router.addRoutes([{
-        path: '/',
-        component: (resolve) => require(['components/app/app-frame'], resolve),
-        children: [{
-          path: '',
-          name: 'Home',
-          component: (resolve) => require(['components/home/index'], resolve),
-          meta: { title: '首页', icon: 'icon-monitor' }
-        }, {
-          path: '/system-error',
-          name: 'SystemError',
-          component: (resolve) => require(['components/error-pages/500'], resolve),
-          meta: { title: '系统错误' }
-        }, {
-          path: '/permission-error',
-          name: 'PermissionError',
-          component: (resolve) => require(['components/error-pages/403'], resolve),
-          meta: { title: '权限错误' }
-        },
-        {
-          path: '/notfound-error',
-          name: 'NotfoundError',
-          component: (resolve) => require(['components/error-pages/404'], resolve),
-          meta: { title: '页面找不到' }
-        },
-        {
-          path: '*',
-          component: (resolve) => require(['components/error-pages/404'], resolve),
-          meta: { title: '页面找不到' }
-        },
-        {
-          path: '/login_log',
-          name: 'login_log',
-          component: (resolve) => require(['components/log-components/login_log'], resolve),
-          meta: { title: '登录日志' }
-        }]
-      }]);
+      this.$router.addRoutes([...defalutcomponets]);
       this.$router.beforeEach((to, from, next) => {
         HeyUI.$LoadingBar.start();
         if (to.meta && to.meta.title) {

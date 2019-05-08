@@ -144,7 +144,7 @@ export default {
         this.$Message['error']('坏人你想干嘛');
       } else {
         var datas = {};
-        if (data != null && data.is_base == '1') {
+        if (data != null && data.is_base === '1') {
           this.$Message['error']('坏人你想干嘛');
         } else {
           if (type == 1) {

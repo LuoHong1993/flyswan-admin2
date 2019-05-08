@@ -42,7 +42,7 @@ export default {
       openSetting: false,
       layoutConfig: {
         siderTheme: 'white',
-        showSystab: false,
+        showSystab: true,
         headerFixed: true,
         siderFixed: true
       }
@@ -76,7 +76,6 @@ export default {
         if (resp.ok) {
           if (resp.code === 0) {
             store.dispatch('updateMenu', resp.data);
-            // this.initRouterConfig();
           }
         }
       });

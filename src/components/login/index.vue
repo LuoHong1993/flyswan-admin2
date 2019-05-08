@@ -124,7 +124,6 @@
 <script>
 
 import Login from 'model/login/Login';
-
 export default {
   data () {
     return {

@@ -140,7 +140,9 @@ export default {
         if (resp.ok) {
           let msg = resp.details;
           Utils.saveLocal('token', msg.sessionId);
-          this.$router.replace('/');
+          // this.$router.replace('/');
+          this.$router.push({ path: '/' });
+          this.loading = false;
         }
         this.loading = false;
       });

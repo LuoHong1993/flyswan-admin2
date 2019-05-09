@@ -44,8 +44,8 @@ module.exports = {
     // 此处应该配置为开发服务器的后台地址
     // 配置文档： https://cli.vuejs.org/zh/config/#devserver-proxy
       '/api': {
-        // target: 'http://192.168.30.29:1111'
-        target: 'http://192.168.0.123:1111'
+        target: 'http://192.168.30.29:1111'
+        // target: 'http://192.168.0.123:1111'
       }
     }
   }

@@ -9,21 +9,7 @@ const routerServiceConfig = async () => {
     if (res.code === 0) {
       if (res.data != null && res.data.length > 0) {
         let buildList = [];
-        for (let i = 0; i < res.data.length; i++) {
-          let item = res.data[i];
-          let buildConfigs = buildConfig(item);
-          if (buildConfigs !== null && buildConfigs !== {} && JSON.stringify(buildConfigs) !== '{}') {
-            buildList.push(buildConfigs);
-          }
-          if (item.children != null && item.children.length > 0) {
-            for (let j = 0; j < item.children.length; j++) {
-              let buildConfigs2 = buildConfig(item.children[j]);
-              if (buildConfigs2 !== null && buildConfigs2 !== {} && JSON.stringify(buildConfigs2) !== '{}') {
-                buildList.push(buildConfigs2);
-              }
-            }
-          }
-        }
+        buildList = analysisData(res.data);
         buildList.push(defalutcomponets[0].children[1]);
         buildList.push(defalutcomponets[0].children[2]);
         buildList.push(defalutcomponets[0].children[3]);
@@ -37,6 +23,21 @@ const routerServiceConfig = async () => {
     }
   }
   return routerConfig;
+};
+
+const analysisData = (data) => {
+  let buildList = [];
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
+    let buildConfigs = buildConfig(item);
+    if (buildConfigs !== null && buildConfigs !== {} && JSON.stringify(buildConfigs) !== '{}') {
+      buildList.push(buildConfigs);
+    }
+    if (item.children != null && item.children.length > 0) {
+      buildList.push(...analysisData(item.children));
+    }
+  }
+  return buildList;
 };
 const buildConfig = (data) => {
   let buildMap = {};

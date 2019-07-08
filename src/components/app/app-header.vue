@@ -88,9 +88,8 @@
 
 <template>
   <div class="app-header">
-    <div style="width:100px;float:left;"><Button :icon="siderCollapsed ? 'icon-align-right':'icon-align-left'" size="l" noBorder class="font20" @click="siderCollapsed=!siderCollapsed"></Button></div>
+    <div style="width:50px;float:left;"><Button :icon="siderCollapsed ? 'icon-align-right':'icon-align-left'" size="l" noBorder class="font20" @click="siderCollapsed=!siderCollapsed"></Button></div>
     <div class="float-right app-header-info">
-      <AutoComplete :showDropdownWhenNoResult="false" v-model="searchText" config="globalSearch" placeholder="全局搜索.."></AutoComplete>
       <div class="app-header-icon-item" v-tooltip content="系统布局配置" theme="white" @click="showSettingModal">
         <i class="icon-content-left"></i>
       </div>
@@ -131,6 +130,19 @@ export default {
         this.$store.commit('updateSiderCollapse', value);
       }
     }
+  },
+  mounted () {
+    const resizeEvent = window.addEventListener('resize', () => {
+      if (this.siderCollapsed && window.innerWidth > 900) {
+        this.siderCollapsed = false;
+      } else if (!this.siderCollapsed && window.innerWidth < 900) {
+        this.siderCollapsed = true;
+      }
+    });
+    this.$once('hook:beforeDestroy', () => {
+      window.removeEventListener('resize', resizeEvent);
+    });
+    window.dispatchEvent(new Event('resize'));
   },
   methods: {
 

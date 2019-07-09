@@ -26,7 +26,6 @@ const initRouter = () => {
 
     if (to.path !== '/login') {
       const Authorization = Utils.getLocal('token');
-      alert(JSON.stringify(Authorization))
       if (Authorization == null || Authorization === '' || Authorization === 'null' || Authorization === undefined) {
         next({ path: '/login' });
       } else {

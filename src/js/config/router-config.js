@@ -4,7 +4,6 @@ import routerServiceConfig from './router-service-config';
 
 Vue.use(VueRouter);
 
-const Authorization = Utils.getLocal('token');
 const initRouter = () => {
   const routerParam = {
     mode: 'history',
@@ -17,7 +16,7 @@ const initRouter = () => {
 
   let router = new VueRouter(routerParam);
 
-  router.beforeEach(async(to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
     HeyUI.$LoadingBar.start();
     if (to.meta && to.meta.title) {
       document.title = to.meta.title + ' - 管理应用';
@@ -26,12 +25,13 @@ const initRouter = () => {
     }
 
     if (to.path !== '/login') {
-      if (Authorization == null || Authorization === '' || Authorization === 'null') {
+      const Authorization = Utils.getLocal('token');
+      alert(JSON.stringify(Authorization))
+      if (Authorization == null || Authorization === '' || Authorization === 'null' || Authorization === undefined) {
         next({ path: '/login' });
       } else {
         if (router.options.routes.length <= 1) {
           let asyncConfig = await routerServiceConfig();
-          log(JSON.stringify(asyncConfig));
           let userRoutes = router.options.routes.concat(asyncConfig);
           router.addRoutes(asyncConfig);
           router.options.routes = userRoutes;
@@ -41,7 +41,15 @@ const initRouter = () => {
         }
       }
     } else {
-      next();
+      if (router.options.routes.length <= 1) {
+        let asyncConfig = await routerServiceConfig();
+        let userRoutes = router.options.routes.concat(asyncConfig);
+        router.addRoutes(asyncConfig);
+        router.options.routes = userRoutes;
+        next({ ...to, replace: true });
+      } else {
+        next();
+      }
     }
   });
   router.afterEach(() => {

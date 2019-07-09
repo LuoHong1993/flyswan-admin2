@@ -137,10 +137,11 @@ export default {
     submit () {
       this.loading = true;
       R.Login.login(Login.dispose(this.login)).then(resp => {
+        alert(JSON.stringify(resp))
         if (resp.ok) {
           let msg = resp.details;
           Utils.saveLocal('token', msg.sessionId);
-          // this.$router.replace('/');
+          alert(JSON.stringify(Utils.getLocal('token')))
           this.$router.push({ path: '/' });
           this.loading = false;
         }

@@ -46,7 +46,7 @@ export default {
       pageData: {}
     };
   },
-  mounted() {
+  mounted () {
     this.init();
   },
   methods: {

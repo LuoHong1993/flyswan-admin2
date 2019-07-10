@@ -27,6 +27,9 @@ const Request = {
   Menu: {
     list () {
       return Ajax.get('/sys/menu/list');
+    },
+    commonlist () {
+      return Ajax.get('/sys/menu/commonlist');
     }
   },
   RouterConfig: {

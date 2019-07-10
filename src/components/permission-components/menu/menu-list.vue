@@ -30,13 +30,13 @@ export default {
               dataMode: 'list',
               datas: resp.data
             };
+            this.open(resp.data[0]);
           }
         }
       });
     },
     open (data) {
-      alert(JSON.stringify(data))
-      this.$emit('test', data.name);
+      this.$emit('menuItemInfo', data);
     }
   }
 };

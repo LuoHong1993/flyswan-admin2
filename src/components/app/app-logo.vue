@@ -34,7 +34,7 @@
 }
 </style>
 <template>
-  <div class="app-logo"><router-link to="/"><span class="app-logo-icon"></span><span class="app-logo-text">FLYADMIN ADMIN</span></router-link></div>
+  <div class="app-logo"><router-link to="/"><span class="app-logo-icon"></span><span class="app-logo-text">FLYADMIN</span></router-link></div>
 </template>
 <script>
 export default {

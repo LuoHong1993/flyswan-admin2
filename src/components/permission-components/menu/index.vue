@@ -10,13 +10,13 @@
     <div class="h-panel-bar"><span class="h-panel-title">菜单管理</span></div>
     <div class="h-panel-body">
       <Row :space="9">
-        <Cell width="8" >
+        <Cell width="7" >
           <Row :space-y="9">
             <Cell width="24" ><Button color="primary" icon="h-icon-plus" >添加</Button></Cell>
             <Cell width="24" ><menulist v-on:menuItemInfo="menuItemInfo" class="menulist"></menulist></Cell>
           </Row>
         </Cell>
-        <Cell width="16" ><div><menuedit :menuItem="menuItem"></menuedit></div></Cell>
+        <Cell width="17" ><div><menuedit :menuItem="menuItem"></menuedit></div></Cell>
       </Row>
     </div>
   </div>

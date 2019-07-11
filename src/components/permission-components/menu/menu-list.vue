@@ -1,22 +1,29 @@
 <template>
-  <Tree :option="param" ref="menus" :toggleOnSelect=true @open="open" @loadDataSuccess=""></Tree>
+  <div><Tree :option="param" ref="menus" :toggleOnSelect=true s @loadDataSuccess="loadDataSuccess"></Tree></div>
 </template>
 
 <script>
 export default {
   data () {
     return {
+      item: {},
       param: {
         keyName: 'id',
         parentName: 'parent_id',
         titleName: 'name',
         dataMode: 'list',
-        datas: []
+        getTotalDatas: (resolve) => {
+          R.Menu.commonlist().then(resp => {
+            // param中的dataMode同样对这里的数据有效
+            let list = resp.data;
+            this.item = list[0];
+            resolve(list);
+          });
+        }
       }
     };
   },
   mounted () {
-    this.initMenu();
   },
   methods: {
     initMenu () {
@@ -35,8 +42,9 @@ export default {
         }
       });
     },
-    open (data) {
-      this.$emit('menuItemInfo', data);
+    loadDataSuccess () {
+      this.$emit('menuItemInfo', this.item);
+      this.$refs.menus.expandAll();
     }
   }
 };

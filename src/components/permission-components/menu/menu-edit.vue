@@ -1,5 +1,5 @@
 <template>
-  <div v-width="800">
+  <div v-width="800" v-if="menuItem">
   <Form :label-width="120"  :model="menuItem" showErrorTip>
     <FormItem label="父级节点" prop="parent_id">
       <input type="text"  v-model="menuItem.parent_id" />
@@ -27,8 +27,8 @@
       </template>
     </FormItem>
     <FormItem label="图标" prop="icon">
-      <div class="h-input-group" v-width="500">
-        <span class="h-input-addon" style="width: 40px;cursor: pointer"><i class="h-icon-home"></i></span>
+      <div class="h-input-group" v-width="680">
+        <span class="h-input-addon" style="width: 40px;cursor: pointer" @click="chooseIcon"><i class="h-icon-home"></i></span>
         <input type="text"  v-model="menuItem.icon" />
       </div>
     </FormItem>
@@ -65,8 +65,8 @@
   </Form>
   </div>
 </template>
-
 <script>
+import IconsWindow from '../../other/icons';
 export default {
   props: ['menuItem'],
   data () {
@@ -76,6 +76,19 @@ export default {
   },
   mounted () {
 
+  },
+  methods: {
+    chooseIcon: function () {
+      this.$Modal({
+        component: {
+          vue: IconsWindow
+        },
+        middle: true,
+        width: 1200,
+        hasCloseIcon: true,
+        closeOnMask: false
+      });
+    }
   }
 };
 </script>

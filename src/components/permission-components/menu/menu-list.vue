@@ -1,5 +1,5 @@
 <template>
-  <Tree :option="param" ref="menus" :toggleOnSelect=true @open="open"></Tree>
+  <Tree :option="param" ref="menus" :toggleOnSelect=true @open="open" @loadDataSuccess=""></Tree>
 </template>
 
 <script>

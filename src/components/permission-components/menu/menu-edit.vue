@@ -20,6 +20,48 @@
         </template>
       </Select>
     </FormItem>
+    <FormItem label="标识" prop="key">
+      <input type="text"  v-model="menuItem.key" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
+    <FormItem label="图标" prop="icon">
+      <div class="h-input-group" v-width="500">
+        <span class="h-input-addon" style="width: 40px;cursor: pointer"><i class="h-icon-home"></i></span>
+        <input type="text"  v-model="menuItem.icon" />
+      </div>
+    </FormItem>
+    <FormItem label="排序" prop="pri">
+      <input type="text"  v-model="menuItem.pri" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
+    <FormItem label="备注" prop="mark">
+      <input type="text"  v-model="menuItem.mark" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
+    <FormItem label="组件" prop="component">
+      <input type="text"  v-model="menuItem.component" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
+    <FormItem label="访问路径" prop="path">
+      <input type="text"  v-model="menuItem.path" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
+    <FormItem label="打开方式" prop="open_type">
+      <input type="text"  v-model="menuItem.open_type" />
+      <template slot="error">
+        <span class="link" ></span>
+      </template>
+    </FormItem>
   </Form>
   </div>
 </template>

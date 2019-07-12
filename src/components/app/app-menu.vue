@@ -70,7 +70,19 @@ export default {
     },
     trigger (data) {
       if (data.children.length > 0) return;
-      this.$router.push({ name: data.key });
+      if (data.value.openType === '1') {
+        if (data.value.type === '2') {
+          window.open(data.value.component, '_blank');
+        } else {
+          window.open(data.value.path, '_blank');
+        }
+      } else {
+        if (data.value.type === '2') {
+          this.$router.push({ name: data.key, params: { url: data.value.component } });
+        } else {
+          this.$router.push({ name: data.key });
+        }
+      }
     },
     hideMenu () {
       this.$store.commit('updateSiderCollapse', true);

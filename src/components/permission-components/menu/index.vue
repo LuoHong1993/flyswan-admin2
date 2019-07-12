@@ -12,11 +12,11 @@
       <Row :space="9">
         <Cell width="7" >
           <Row :space-y="9">
-            <Cell width="24" ><Button color="primary" icon="h-icon-plus" >添加</Button></Cell>
+            <Cell width="24" ><Button color="primary" icon="h-icon-plus" @click="addMenu">添加</Button></Cell>
             <Cell width="24" ><menulist v-on:menuItemInfo="menuItemInfo" class="menulist"></menulist></Cell>
           </Row>
         </Cell>
-        <Cell width="17" ><div><menuedit :menuItem="menuItem"></menuedit></div></Cell>
+        <Cell width="17" ><div><menuedit :menuId="menuId" v-on:updatedata="updatedata"></menuedit></div></Cell>
       </Row>
     </div>
   </div>
@@ -28,7 +28,7 @@ import menuedit from './menu-edit';
 export default {
   data () {
     return {
-      menuItem: ''
+      menuId: ''
     };
   },
   mounted () {
@@ -36,7 +36,13 @@ export default {
   },
   methods: {
     menuItemInfo: function (res) {
-      this.menuItem = res;
+      this.menuId = res;
+    },
+    addMenu: function () {
+      this.menuId = 'new';
+    },
+    updatedata: function (data) {
+      this.menuId = data;
     }
   },
   components: {

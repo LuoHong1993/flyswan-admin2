@@ -1,5 +1,5 @@
 <template>
-  <div><Tree :option="param" ref="menus" :toggleOnSelect=true s @loadDataSuccess="loadDataSuccess"></Tree></div>
+  <div><Tree :option="param" ref="menus" :toggleOnSelect=true @open="open" @loadDataSuccess="loadDataSuccess"></Tree></div>
 </template>
 
 <script>
@@ -26,25 +26,13 @@ export default {
   mounted () {
   },
   methods: {
-    initMenu () {
-      R.Menu.commonlist().then(resp => {
-        if (resp.ok) {
-          if (resp.code === 0) {
-            this.param = {
-              keyName: 'id',
-              parentName: 'parent_id',
-              titleName: 'name',
-              dataMode: 'list',
-              datas: resp.data
-            };
-            this.open(resp.data[0]);
-          }
-        }
-      });
-    },
     loadDataSuccess () {
-      this.$emit('menuItemInfo', this.item);
+      this.$refs.menus.updateSelect(this.item.id);
+      this.$emit('menuItemInfo', this.item.id);
       this.$refs.menus.expandAll();
+    },
+    open (data) {
+      this.$emit('menuItemInfo', data.id);
     }
   }
 };

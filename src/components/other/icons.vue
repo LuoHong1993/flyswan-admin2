@@ -10,10 +10,10 @@
       white-space: nowrap;
       overflow: hidden;
       [class^="icon-"], [class*=" icon-"]{
-        font-size: 28px;
+        font-size: 18px;
       }
       [class^="h-icon"], [class*=" h-icon"]{
-        font-size: 28px;
+        font-size: 18px;
       }
       p{
         margin: 10px 0px;
@@ -25,9 +25,9 @@
   <div class="icons-choose-vue h-panel frame-page" ref="icons">
 
     <div class="h-panel-body">
-      <Row :space="16">
-        <Cell v-for='n of icons' :xs='16' :sm='16' :md='8' :lg='6' :xl='4' :key="n">
-          <div style="cursor: pointer">
+      <Row :space="10">
+        <Cell v-for='n of icons' :xs='12' :sm='12' :md='6' :lg='4' :xl='3' :key="n">
+          <div style="cursor: pointer" @click="success(n)">
             <p><i :class="n"></i></p>
             <p>{{n}}</p>
           </div>
@@ -225,6 +225,10 @@ export default {
     this.$refs.icons.style.height = (document.body.clientHeight*0.8)+'px';
   },
   methods: {
+    success: function (data) {
+      this.$emit('success', data);
+      this.$emit('close');
+    }
   },
   computed: {
   }

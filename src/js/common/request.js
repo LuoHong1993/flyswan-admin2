@@ -30,6 +30,12 @@ const Request = {
     },
     commonlist () {
       return Ajax.get('/sys/menu/commonlist');
+    },
+    getMenuItemById (param) {
+      return Ajax.post('/sys/menu/getMenuItemById', param);
+    },
+    save (param) {
+      return Ajax.post('/sys/menu/save', param);
     }
   },
   RouterConfig: {

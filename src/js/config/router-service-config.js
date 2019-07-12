@@ -42,7 +42,7 @@ const analysisData = (data) => {
 const buildConfig = (data) => {
   let buildMap = {};
   let rpath = data.path;
-  const rcomponent = data.component;
+  const rcomponent = data.type === '2' ? 'components/other/iframe' : data.component;
   let rtitle = data.title == null ? '' : data.title;
   let ricon = data.icon;
   let rkey = data.key;

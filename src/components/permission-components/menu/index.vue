@@ -13,7 +13,7 @@
         <Cell width="7" >
           <Row :space-y="9">
             <Cell width="24" ><Button color="primary" icon="h-icon-plus" @click="addMenu">添加</Button></Cell>
-            <Cell width="24" ><menulist v-on:menuItemInfo="menuItemInfo" class="menulist"></menulist></Cell>
+            <Cell width="24" ><menulist v-on:menuItemInfo="menuItemInfo" class="menulist" ref="menus"></menulist></Cell>
           </Row>
         </Cell>
         <Cell width="17" ><div><menuedit :menuId="menuId" v-on:updatedata="updatedata"></menuedit></div></Cell>
@@ -42,6 +42,9 @@ export default {
       this.menuId = 'new';
     },
     updatedata: function (data) {
+     if(data === '0'){
+       this.$refs.menus.refresh();
+     }
       this.menuId = data;
     }
   },

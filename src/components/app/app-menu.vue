@@ -69,6 +69,7 @@ export default {
       }
     },
     trigger (data) {
+
       if (data.children.length > 0) return;
       if (data.value.openType === '1') {
         if (data.value.type === '2') {

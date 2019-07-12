@@ -2,7 +2,7 @@
   <div v-width="800" v-if="menuItem">
   <Form :label-width="200"  :model="menuItem" showErrorTip>
     <FormItem label="父级节点" prop="parent_id">
-      <TreePicker :option="treepickerparam" :useConfirm="false" :disabled="menuItem.is_base==='1'" ref="treepicker" v-model="menuItem.parent_id"></TreePicker>
+      <TreePicker :option="treepickerparam" :useConfirm="false" :disabled="menuItem.is_base==='1'" ref="treepicker" v-model="menuItem.parent_id" @select="selectParent"></TreePicker>
     </FormItem>
     <FormItem label="名称" prop="name">
       <input type="text"  v-model="menuItem.name"/>
@@ -10,8 +10,8 @@
         <span class="link" ></span>
       </template>
     </FormItem>
-    <FormItem label="标识" prop="key">
-      <input type="text"  v-model="menuItem.key" :disabled="menuItem.is_base==='1'"/>
+    <FormItem label="标识" prop="code">
+      <input type="text"  v-model="menuItem.code" :disabled="menuItem.is_base==='1'"/>
       <template slot="error">
         <span class="link" ></span>
       </template>
@@ -70,6 +70,7 @@
 </template>
 <script>
 import IconsWindow from '../../other/icons';
+import store from '../../../js/vuex/store';
 export default {
   props: ['menuId'],
   data () {
@@ -111,11 +112,11 @@ export default {
           icon: '',
           id: '',
           is_base: '0',
-          key: '',
+          code: '',
           mark: '',
           name: '',
           open_type: '0',
-          parent_id: '',
+          parent_id: '0',
           path: '',
           pri: '',
           type: '1'
@@ -156,8 +157,9 @@ export default {
       R.Menu.save(this.menuItem).then(resp => {
         if (resp.ok) {
           if (resp.code === 0) {
+            this.initMenu();
+            this.$emit('updatedata', '0');
             this.$Message['success']('保存成功');
-            this.$router.push({ path: '/' });
           } else {
             this.$Message['error'](resp.message);
           }
@@ -170,7 +172,19 @@ export default {
     },
     cancelMenu: function () {
       this.$emit('updatedata', this.oldMenuId);
-    }
+    },
+    selectParent: function (data) {
+      this.menuItem.parent_id = data.id;
+    },
+    initMenu () {
+      R.Menu.list().then(resp => {
+        if (resp.ok) {
+          if (resp.code === 0) {
+            store.dispatch('updateMenu', resp.data);
+          }
+        }
+      });
+    },
   }
 };
 </script>

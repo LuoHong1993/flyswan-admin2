@@ -33,6 +33,10 @@ export default {
     },
     open (data) {
       this.$emit('menuItemInfo', data.id);
+    },
+    refresh () {
+      this.$refs.menus.refresh();
+      this.$emit('menuItemInfo', data.id);
     }
   }
 };

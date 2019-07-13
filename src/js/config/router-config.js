@@ -31,7 +31,6 @@ const initRouter = () => {
       } else {
         if (router.options.routes.length <= 1) {
           let asyncConfig = await routerServiceConfig();
-          console.log(JSON.stringify(asyncConfig));
           let userRoutes = router.options.routes.concat(asyncConfig);
           router.addRoutes(asyncConfig);
           router.options.routes = userRoutes;

@@ -36,6 +36,18 @@ const Request = {
     },
     save (param) {
       return Ajax.post('/sys/menu/save', param);
+    },
+    delete (param) {
+      return Ajax.post('/sys/menu/delete', param);
+    },
+    getMaxPri (param) {
+      return Ajax.post('/sys/menu/getMaxPri', param);
+    },
+    isExistCode (param) {
+      return Ajax.post('/sys/menu/isExistCode', param);
+    },
+    isExistPri (param) {
+      return Ajax.post('/sys/menu/isExistPri', param);
     }
   },
   RouterConfig: {

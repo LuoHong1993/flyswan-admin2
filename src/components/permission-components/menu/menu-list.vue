@@ -36,7 +36,7 @@ export default {
     },
     refresh () {
       this.$refs.menus.refresh();
-      this.$emit('menuItemInfo', data.id);
+      this.$emit('menuItemInfo', '0001');
     }
   }
 };

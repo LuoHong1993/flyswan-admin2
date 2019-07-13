@@ -42,10 +42,11 @@ export default {
       this.menuId = 'new';
     },
     updatedata: function (data) {
-     if(data === '0'){
-       this.$refs.menus.refresh();
-     }
-      this.menuId = data;
+      if (data === '0') {
+        this.$refs.menus.refresh();
+      } else {
+        this.menuId = data;
+      }
     }
   },
   components: {

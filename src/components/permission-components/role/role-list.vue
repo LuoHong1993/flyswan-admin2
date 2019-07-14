@@ -14,9 +14,10 @@
         <TableItem :width="100" prop="level" title="级别" sort="auto" sortProp='level'></TableItem>
         <TableItem :width="200" prop="create_time" title="创建时间" :render="tranCreateTime" sort="auto" sortProp='create_time'></TableItem>
         <TableItem :width="200" prop="update_time" title="修改时间" :render="tranUpdateTime" sort="auto" sortProp='update_time'></TableItem>
-        <TableItem :width="400" prop="remark" title="备注"></TableItem>
-        <TableItem title="操作" :width="100" fixed="right">
+        <TableItem :width="350" prop="remark" title="备注"></TableItem>
+        <TableItem title="操作" :width="150" fixed="right">
           <template slot-scope="{data}">
+            <button class="h-btn h-btn-s h-btn-green"   @click="addPermission()"><i class="h-icon-plus"></i></button>
             <button class="h-btn h-btn-s h-btn-primary" :disabled="(data.is_base == 1)||(data.maxPower>=data.level)" @click="open('1',data)"><i class="h-icon-edit"></i></button>
             <button class="h-btn h-btn-s h-btn-red"  :disabled="(data.is_base == 1)||(data.maxPower>=data.level)" @click="remove(data.id,data.is_base)"><i class="h-icon-trash"></i></button>
           </template>
@@ -30,6 +31,7 @@
 <script>
 import Ajax from '../../../js/common/ajax';
 import EditWindow from './role_edit';
+import MenuList from '../menu/menu-choose';
 export default {
   data() {
     return {
@@ -169,6 +171,23 @@ export default {
           });
         }
       }
+    },
+    addPermission: function () {
+      this.$Modal({
+        component: {
+          vue: MenuList,
+          datas: { level: this.level }
+        },
+        middle: true,
+        width: 1000,
+        hasCloseIcon: true,
+        closeOnMask: false,
+        events: {
+          success: (modal, data) => {
+            this.menuItem.icon = data;
+          }
+        }
+      });
     }
   },
   computed: {

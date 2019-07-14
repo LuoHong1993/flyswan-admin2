@@ -1,5 +1,5 @@
 <template>
-  <div><Tree :option="param" ref="menus" :toggleOnSelect=true @open="open" @loadDataSuccess="loadDataSuccess"></Tree></div>
+  <div><Tree :option="param" ref="menus" :toggleOnSelect=false  @loadDataSuccess="loadDataSuccess" @select="select" ></Tree></div>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ export default {
       this.$emit('menuItemInfo', this.item.id);
       this.$refs.menus.expandAll();
     },
-    open (data) {
+    select (data) {
       this.$emit('menuItemInfo', data.id);
     },
     refresh () {

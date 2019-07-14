@@ -1,18 +1,18 @@
 <template>
   <div v-width="800" v-if="menuItem">
     <Loading text="Loading" :loading="loading"></Loading>
-  <Form :label-width="200"  :model="menuItem" showErrorTip >
+   <Form :label-width="200"  :model="menuItem" showErrorTip v-if="menuItem" :rules="validationRules">
     <FormItem label="父级节点" prop="parent_id">
-      <TreePicker :option="treepickerparam" :useConfirm="false" :disabled="menuItem.is_base==='1'" ref="treepicker" v-model="menuItem.parent_id" @select="selectParent"></TreePicker>
+      <TreePicker :option="treepickerparam" :useConfirm="false" :disabled="menuItem.is_base==='1'" ref="treepicker" v-model="menuItem.parent_id" @select="selectParent" :toggleOnSelect=false></TreePicker>
     </FormItem>
     <FormItem label="名称" prop="name">
-      <input type="text"  v-model="menuItem.name" :disabled="menuItem.is_base==='1'"/>
+      <input type="text"  v-model="menuItem.name" :disabled="menuItem.is_base==='1'" placeholder="限制输入6个字" v-wordlimit='6'/>
       <template slot="error">
         <span class="link" ></span>
       </template>
     </FormItem>
     <FormItem label="标识" prop="code">
-      <input type="text"  v-model="menuItem.code" :disabled="menuItem.is_base==='1'"/>
+      <input type="text"  v-model="menuItem.code" :disabled="menuItem.is_base==='1'" placeholder="限制输入6个字" v-wordlimit='6'/>
       <template slot="error">
         <span class="link" ></span>
       </template>
@@ -31,7 +31,7 @@
         <span class="h-input-addon h-icon-trash" v-if="menuItem.icon!==''"  ></span>
       </div>
     </FormItem>
-    <FormItem label="同级排序" prop="pri">
+    <FormItem label="同级排序">
       <NumberInput  :useOperate="true" v-model="menuItem.pri" :min=1 :disabled="menuItem.is_base==='1'"></NumberInput>
       <template slot="error">
         <span class="link" ></span>
@@ -43,7 +43,7 @@
         <span class="link" ></span>
       </template>
     </FormItem>
-    <FormItem label="类型" prop="name">
+    <FormItem label="类型">
       <Select  keyName="code" titleName="name" v-model="menuItem.type" placeholder="请选择类型" null-option-text="--请选择类型--" :datas="types" :disabled="menuItem.is_base==='1'">
         <template slot-scope="{item}" slot="item">
           <div>{{item.name}}</div>
@@ -80,7 +80,6 @@
 <script>
 import IconsWindow from '../../other/icons';
 import store from '../../../js/vuex/store';
-import routerServiceConfig from '../../../js/config/router-service-config';
 export default {
   props: ['menuId'],
   data () {
@@ -89,7 +88,6 @@ export default {
       loading: false,
       maxPri: 1,
       oldMenuId: '0001',
-      lastMenuId: '0',
       types: [ { code: '0', name: '父栏目' }, { code: '1', name: '组件' }, { code: '2', name: '外部页面' } ],
       openTypes: [{ code: '0', name: '框内打开' }, { code: '1', name: '新窗口' }],
       treepickerparam: {
@@ -111,30 +109,22 @@ export default {
             resolve(list);
           });
         }
-      }
+      },
+      validationRules: {
+        required: [
+          'name',
+          'code'
+        ]
+      },
     };
   },
   mounted () {
     this.getMenuItem();
   },
   watch: {
-    menuId () {
+    async menuId () {
       if (this.menuId === 'new') {
-        this.getMaxPri(this.lastMenuId);
-        this.menuItem = {
-          component: '',
-          icon: '',
-          id: '',
-          is_base: '0',
-          code: '',
-          mark: '',
-          name: '',
-          open_type: '0',
-          parent_id: this.lastMenuId,
-          path: '',
-          pri: this.maxPri,
-          type: '1'
-        };
+        await this.newMenuItem();
       } else {
         this.oldMenuId = this.menuId;
         this.oldMenuId = this.menuId;
@@ -149,9 +139,6 @@ export default {
         if (resp.ok) {
           if (resp.code === 0) {
             this.menuItem = resp.data;
-            if (this.menuItem.type !== '0') {
-              this.lastMenuId = this.menuItem.parent_id;
-            }
             this.loading = false;
           } else {
             this.loading = false;
@@ -182,12 +169,8 @@ export default {
       R.Menu.save(this.menuItem).then(async resp => {
         if (resp.ok) {
           if (resp.code === 0) {
-            let asyncConfig = await routerServiceConfig();
-            let userRoutes = this.$router.options.routes.concat(asyncConfig);
-            this.$router.options.routes = userRoutes;
-            this.initMenu();
             this.loading = false;
-            this.$Message['success']('保存成功');
+            this.$Message['success']('保存成功，需要您重新刷新整个页面才能生效');
             this.$emit('updatedata', '0');
           } else {
             this.loading = false;
@@ -206,7 +189,7 @@ export default {
             if (resp.code === 0) {
               this.initMenu();
               this.$emit('updatedata', '0');
-              this.$Message['success']('删除成功');
+              this.$Message['success']('删除成功，需要您重新刷新整个页面才能生效');
             } else {
               this.$Message['error'](resp.message);
             }
@@ -234,14 +217,17 @@ export default {
     cleanIcon () {
       this.menuItem.icon = '';
     },
-    getMaxPri (parentId) {
-      R.Menu.getMaxPri({ parentId: parentId }).then(resp => {
-        if (resp.ok) {
-          if (resp.code === 0) {
-            this.maxPri = resp.data;
-          }
+    async getMaxPri (parentId) {
+      let resp = await R.Menu.getMaxPri({ parentId: parentId });
+      if (resp.ok) {
+        if (resp.code === 0) {
+          return resp.data;
+        } else {
+          return 1;
         }
-      });
+      } else {
+        return 1;
+      }
     },
     async isExistCode () {
       let resp = await R.Menu.isExistCode({ code: this.menuItem.code, id: this.menuItem.id });
@@ -251,13 +237,33 @@ export default {
         return false;
       }
     },
-    async isExistPri () {
-      let resp = await R.Menu.isExistPri({ pri: this.menuItem.pri, parentId: this.menuItem.parent_id, id: this.menuItem.id });
+    isExistPri: async function () {
+      let resp = await R.Menu.isExistPri({
+        pri: this.menuItem.pri,
+        parentId: this.menuItem.parent_id,
+        id: this.menuItem.id
+      });
       if (resp.ok) {
         return resp.data;
       } else {
         return false;
       }
+    },
+    async newMenuItem () {
+      this.menuItem = {
+        component: '',
+        icon: '',
+        id: '',
+        is_base: '0',
+        code: '',
+        mark: '',
+        name: '',
+        open_type: '0',
+        parent_id: '0',
+        path: '',
+        pri: await this.getMaxPri('0'),
+        type: '1'
+      };
     }
   }
 };

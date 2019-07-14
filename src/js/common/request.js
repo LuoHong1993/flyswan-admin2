@@ -6,6 +6,14 @@ const Request = {
       return Ajax.get('/sys/user/info');
     }
   },
+  Role: {
+    getMenuIdByRole () {
+      return Ajax.post('/sys/role/getMenuIdByRole');
+    },
+    saveRoleMenu () {
+      return Ajax.post('/sys/role/saveRoleMenu');
+    }
+  },
   Dict: {
     get () {
       return Ajax.get(`/dict`);

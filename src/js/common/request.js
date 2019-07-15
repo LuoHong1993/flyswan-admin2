@@ -7,11 +7,11 @@ const Request = {
     }
   },
   Role: {
-    getMenuIdByRole () {
-      return Ajax.post('/sys/role/getMenuIdByRole');
+    getMenuIdByRole (param) {
+      return Ajax.post('/sys/role/getMenuIdByRole',param);
     },
-    saveRoleMenu () {
-      return Ajax.post('/sys/role/saveRoleMenu');
+    saveRoleMenu (param) {
+      return Ajax.post('/sys/role/saveRoleMenu',param);
     }
   },
   Dict: {

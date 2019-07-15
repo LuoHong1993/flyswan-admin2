@@ -39,7 +39,6 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
 import appLogo from './app-logo';
 
 export default {
@@ -48,6 +47,7 @@ export default {
   },
   data () {
     return {
+      Menus: []
     };
   },
   watch: {
@@ -56,11 +56,10 @@ export default {
     }
   },
   mounted () {
+    this.initMenu();
     this.menuSelect();
   },
   computed: {
-    ...mapState(['Menus']),
-    ...mapState(['siderCollapsed'])
   },
   methods: {
     menuSelect () {
@@ -87,7 +86,16 @@ export default {
     },
     hideMenu () {
       this.$store.commit('updateSiderCollapse', true);
-    }
+    },
+    initMenu () {
+      R.Menu.list().then(resp => {
+        if (resp.ok) {
+          if (resp.code === 0) {
+            this.Menus = resp.data;
+          }
+        }
+      });
+    },
   },
   components: {
     appLogo

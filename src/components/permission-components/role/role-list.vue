@@ -17,7 +17,7 @@
         <TableItem :width="350" prop="remark" title="备注"></TableItem>
         <TableItem title="操作" :width="150" fixed="right">
           <template slot-scope="{data}">
-            <button class="h-btn h-btn-s h-btn-green"   @click="addPermission()"><i class="h-icon-plus"></i></button>
+            <button class="h-btn h-btn-s h-btn-green"   @click="addPermission(data)"><i class="h-icon-plus"></i></button>
             <button class="h-btn h-btn-s h-btn-primary" :disabled="(data.is_base == 1)||(data.maxPower>=data.level)" @click="open('1',data)"><i class="h-icon-edit"></i></button>
             <button class="h-btn h-btn-s h-btn-red"  :disabled="(data.is_base == 1)||(data.maxPower>=data.level)" @click="remove(data.id,data.is_base)"><i class="h-icon-trash"></i></button>
           </template>
@@ -172,11 +172,11 @@ export default {
         }
       }
     },
-    addPermission: function () {
+    addPermission: function (data) {
       this.$Modal({
         component: {
           vue: MenuList,
-          datas: { level: this.level }
+          datas: { level: data.level, roleId: data.id, myLevel: this.level }
         },
         middle: true,
         width: 1000,

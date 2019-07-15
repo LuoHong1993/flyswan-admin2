@@ -94,7 +94,7 @@ export default {
         this.loading = true;
         Ajax.post(this.apiUrl, param).then(resp => {
           if (resp.ok) {
-            if (resp.code === '0') {
+            if (resp.code === 0) {
               this.$Message['success']('保存成功');
               this.loading = false;
               this.$emit('event', 'success');
@@ -138,12 +138,12 @@ export default {
       }
       return true;
     },
-    usePwd() {
+    usePwd () {
       if (this.defultPwd === 'yes') {
         this.data.password = '123456';
       }
     },
-    close() {
+    close () {
       this.$emit('close');
     }
   }

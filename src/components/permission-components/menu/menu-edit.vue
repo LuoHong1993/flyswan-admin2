@@ -12,7 +12,7 @@
       </template>
     </FormItem>
     <FormItem label="标识" prop="code">
-      <input type="text"  v-model="menuItem.code" :disabled="menuItem.is_base==='1'" placeholder="限制输入6个字" v-wordlimit='6'/>
+      <input type="text"  v-model="menuItem.code" :disabled="menuItem.is_base==='1'" placeholder="限制输入20个字" v-wordlimit='20'/>
       <template slot="error">
         <span class="link" ></span>
       </template>
@@ -115,7 +115,7 @@ export default {
           'name',
           'code'
         ]
-      },
+      }
     };
   },
   mounted () {

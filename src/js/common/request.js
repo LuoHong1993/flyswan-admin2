@@ -24,6 +24,14 @@ const Request = {
       return Ajax.get('/sys/message/list');
     }
   },
+  Log: {
+    operareModule () {
+      return Ajax.get('/sys/log/operareModule');
+    },
+    operateLogPage (param) {
+      return Ajax.post('/sys/log/operateLogPage', param);
+    }
+  },
   Login: {
     login (param) {
       return Ajax.post('/authentication/from', param);

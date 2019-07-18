@@ -138,7 +138,7 @@ export default {
       this.loading = true;
       R.Login.login(Login.dispose(this.login)).then(resp => {
         if (resp.ok) {
-          let sessionId = resp.sessionId;
+          let sessionId = resp.access_token;
           Utils.saveLocal('token', sessionId);
           this.$router.push({ path: '/' });
           this.loading = false;

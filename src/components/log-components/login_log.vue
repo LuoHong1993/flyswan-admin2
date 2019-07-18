@@ -10,7 +10,7 @@
         <TableItem :width="200" prop="operateAccount" title="登录账号" sort="auto"></TableItem>
         <TableItem :width="200" prop="operateTime" title="登录时间" sort="auto"></TableItem>
         <TableItem :width="200" prop="ip" title="ip" sort="auto"></TableItem>
-        <TableItem :width="200"  title="地址" sort="auto">
+        <TableItem :width="200"  sortProp="city"  title="地址" sort="auto">
           <template slot-scope="{data}">
 
               <span v-if="data.country!='' && data.country!=null">{{data.country}}</span>
@@ -18,7 +18,7 @@
               <span v-if="data.city!='' && data.city!=null" style="margin-left: 14px">{{data.city}}</span>
           </template>
         </TableItem>
-        <TableItem :width="200"  title="登录结果" sort="auto" >
+        <TableItem :width="200" sortProp="result"  title="登录结果" sort="auto" >
           <template slot-scope="{data}">
             <ul v-if="data.result=='0'">
               <span class="h-tag h-tag-bg-green">成功</span>

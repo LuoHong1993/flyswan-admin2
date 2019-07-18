@@ -40,7 +40,7 @@
 </template>
 <script>
 import appLogo from './app-logo';
-
+import { mapState } from 'vuex';
 export default {
   props: {
     theme: String
@@ -60,6 +60,7 @@ export default {
     this.menuSelect();
   },
   computed: {
+    ...mapState(['siderCollapsed'])
   },
   methods: {
     menuSelect () {
@@ -95,7 +96,7 @@ export default {
           }
         }
       });
-    },
+    }
   },
   components: {
     appLogo

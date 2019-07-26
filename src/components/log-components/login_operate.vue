@@ -3,28 +3,37 @@
     <div class="h-panel-bar"><span class="h-panel-title">操作日志</span></div>
     <div class="h-panel-body">
       <Row :space="9">
-        <Cell width="2" >
+        <Cell width="3" >
           <Row :space-y="9">
-            <Tree  :option="modules" ref="modules" :toggleOnSelect=false  @loadDataSuccess="loadDataSuccess"></Tree>
+            <Tree  :option="modules" ref="modules" :toggleOnSelect=false  @loadDataSuccess="loadDataSuccess" @select="select"></Tree>
           </Row>
         </Cell>
-        <Cell width="22" >
+        <Cell width="21" >
           <Table :loading="loading" :datas="datas">
-            <TableItem :width="100" title="序号">
+            <TableItem :width="80" title="序号" fixed="left">
               <template slot-scope="{index}">{{index+1}} </template>
             </TableItem>
-            <TableItem :width="200" prop="operateAccount" title="登录账号" sort="auto"></TableItem>
-            <TableItem :width="200" prop="operateTime" title="登录时间" sort="auto"></TableItem>
-            <TableItem :width="200" prop="ip" title="ip" sort="auto"></TableItem>
-            <TableItem :width="200"  sortProp="city"  title="地址" sort="auto">
+            <TableItem :width="120" prop="operateAccount" title="操作账号" sort="auto" fixed="left"></TableItem>
+            <TableItem :width="180" sortProp="operateModule" title="操作模块" sort="auto">
               <template slot-scope="{data}">
-
-                <span v-if="data.country!='' && data.country!=null">{{data.country}}</span>
-                <span v-if="data.region!='' && data.region!=null" style="margin-left: 14px">{{data.region}}</span>
-                <span v-if="data.city!='' && data.city!=null" style="margin-left: 14px">{{data.city}}</span>
+                <span>{{getModule(data.operateModule)}}</span>
               </template>
             </TableItem>
-            <TableItem :width="200" sortProp="result"  title="登录结果" sort="auto" >
+            <TableItem :width="150" prop="operateObject" title="操作内容"></TableItem>
+            <TableItem :width="150" prop="ip" title="ip" sort="auto"></TableItem>
+            <TableItem :width="200" prop="operateTime" title="操作时间" sort="auto"></TableItem>
+            <TableItem :width="300"  title="操作方法">
+              <template slot-scope="{data}">
+                <span style="color: #bcbcbc">{{data.operateMethod}}</span>
+              </template>
+            </TableItem>
+            <TableItem :width="600" title="操作参数">
+              <template slot-scope="{data}">
+                <span style="color: #bcbcbc">{{data.operateParam}}</span>
+              </template>
+            </TableItem>
+            <TableItem :width="150" prop="time" title="耗时(ms)" sort="auto" fixed="right"></TableItem>
+            <TableItem :width="100" sortProp="result"  title="操作结果" sort="auto" fixed="right">
               <template slot-scope="{data}">
                 <ul v-if="data.result=='0'">
                   <span class="h-tag h-tag-bg-green">成功</span>
@@ -43,7 +52,6 @@
   </div>
 </template>
 <script>
-import Ajax from '../../js/common/ajax';
 export default {
   data () {
     return {
@@ -53,6 +61,8 @@ export default {
         size: 10,
         total: 0
       },
+      module: 'all',
+      list: [],
       modules: {
         keyName: 'value',
         parentName: 'parent_id',
@@ -60,9 +70,9 @@ export default {
         dataMode: 'list',
         getTotalDatas: (resolve) => {
           R.Log.operareModule().then(resp => {
-            let list = resp.data;
-            list.push({ value: '0', name: '全部' });
-            resolve(list);
+            this.list = resp.data;
+            this.list.push({ value: '0', name: '全部' });
+            resolve(this.list);
           });
         }
       },
@@ -87,7 +97,15 @@ export default {
       this.$refs.modules.updateSelect('0');
       this.$refs.modules.expandAll();
     },
-
+    getModule (value) {
+      for (var i = 0; i < this.list.length; i++) {
+        var item = this.list[i];
+        if (item.value === value) {
+          return item.name;
+        }
+      }
+      return '';
+    },
     async getData (reload) {
       if (reload) {
         this.index = 0;
@@ -97,8 +115,8 @@ export default {
         this.index = (this.pagination.page - 1) * this.pagination.size;
       }
       this.loading = true;
-      let param = { index: this.index, pageSize: this.pagination.size };
-      let resp = await Ajax.post('/sys/log/loginLogPage', param);
+      let param = { index: this.index, pageSize: this.pagination.size, module: this.module };
+      let resp = await R.Log.operateLogPage(param);
       if (resp.ok) {
         if (resp.code == '0') {
           this.datas = resp.data.items;
@@ -110,6 +128,10 @@ export default {
       } else {
         this.loading = false;
       }
+    },
+    select (data) {
+      this.module = data.value;
+      this.getData(true);
     }
   },
   computed: {

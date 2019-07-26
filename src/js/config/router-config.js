@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import routerServiceConfig from './router-service-config';
+import { routerServiceConfig, isHasMenu } from './router-service-config';
 
 Vue.use(VueRouter);
 
@@ -34,21 +34,21 @@ const initRouter = () => {
           let userRoutes = router.options.routes.concat(asyncConfig);
           router.addRoutes(asyncConfig);
           router.options.routes = userRoutes;
-          next({ ...to, replace: true });
+          if (to.name != null && !isHasMenu(to.name)) {
+            next({ name: 'PermissionError' });
+          } else {
+            next({ ...to, replace: true });
+          }
         } else {
-          next();
+          if (to.name != null && !isHasMenu(to.name)) {
+            next({ name: 'PermissionError' });
+          } else {
+            next();
+          }
         }
       }
     } else {
-      if (router.options.routes.length <= 1) {
-        let asyncConfig = await routerServiceConfig();
-        let userRoutes = router.options.routes.concat(asyncConfig);
-        router.addRoutes(asyncConfig);
-        router.options.routes = userRoutes;
-        next({ ...to, replace: true });
-      } else {
-        next();
-      }
+      next();
     }
   });
   router.afterEach(() => {

@@ -1,10 +1,10 @@
 import defalutcomponets from './defalut-componets';
-import Ajax from '../common/ajax';
+import store from '../vuex/store';
 
 const routerServiceConfig = async () => {
   let routerConfig = [];
   routerConfig = defalutcomponets;
-  let res = await Ajax.get('/sys/menu/list');
+  let res = await R.Menu.list();
   if (res.ok) {
     if (res.code === 0) {
       if (res.data != null && res.data.length > 0) {
@@ -19,6 +19,7 @@ const routerServiceConfig = async () => {
           component: (resolve) => require(['components/app/app-frame'], resolve),
           children: buildList
         }];
+        store.dispatch('updateMenu', res.data);
       }
     }
   }
@@ -62,5 +63,23 @@ const buildConfig = (data) => {
 
   return buildMap;
 };
+const getKeys = function (menus) {
+  let keys = [];
+  for (let menu of menus) {
+    keys.push(menu.key);
+    if (menu.children && menu.children.length) {
+      keys.push(...getKeys(menu.children));
+    }
+  }
+  return keys;
+};
+const isHasMenu = (data) => {
+  let menus = store.state.Menus;
+  let fullMenuKeys = getKeys(menus);
+  if (fullMenuKeys.indexOf(name) > -1 && menus.indexOf(name) == -1) {
+    return false;
+  }
+  return true;
+};
 
-export default routerServiceConfig;
+export { routerServiceConfig, isHasMenu };

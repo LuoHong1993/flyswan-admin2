@@ -60,7 +60,7 @@ export default {
   methods: {
     init () {
       this.$Loading('加载中');
-      this.initMenu();
+      // this.initMenu();
       R.User.info().then(resp => {
         if (resp.ok) {
           if (resp.code === 0) {

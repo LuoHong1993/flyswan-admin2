@@ -47,7 +47,7 @@ export default {
   },
   data () {
     return {
-      Menus: []
+      //  Menus: []
     };
   },
   watch: {
@@ -56,10 +56,11 @@ export default {
     }
   },
   mounted () {
-    this.initMenu();
+    // this.initMenu();
     this.menuSelect();
   },
   computed: {
+    ...mapState(['Menus']),
     ...mapState(['siderCollapsed'])
   },
   methods: {

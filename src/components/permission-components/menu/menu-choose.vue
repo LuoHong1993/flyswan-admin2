@@ -64,7 +64,7 @@ export default {
     saveMenu () {
       this.loading = true;
       let list = [];
-      let options = this.$refs.menus.getFullChoose();
+      let options = this.$refs.menus.getChoose();
       if (options.length > 0) {
         for (let i = 0; i < options.length; i++) {
           let item = options[i];

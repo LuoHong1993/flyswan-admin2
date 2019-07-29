@@ -2,7 +2,7 @@
   <div class="menu-choose-vue h-panel frame-page" ref="menuList">
     <Loading text="保存中..." :loading="loading"></Loading>
     <div class="h-panel-body">
-      <div><Tree :option="param" ref="menus" :toggleOnSelect=false  @loadDataSuccess="loadDataSuccess" @select="select" :multiple="true" ></Tree></div>
+      <div><Tree :option="param" ref="menus" :toggleOnSelect=false  @loadDataSuccess="loadDataSuccess" @select="select" :multiple="true" choose-mode="some" ></Tree></div>
       <div style="text-align: center">
         <button class="h-btn h-btn-primary" @click="saveMenu" :disabled="myLevel>level">保存</button>
         <button class="h-btn h-btn-white" @click="cancelMenu">取消</button>
@@ -64,7 +64,7 @@ export default {
     saveMenu () {
       this.loading = true;
       let list = [];
-      let options = this.$refs.menus.getChoose();
+      let options = this.$refs.menus.getFullChoose();
       if (options.length > 0) {
         for (let i = 0; i < options.length; i++) {
           let item = options[i];

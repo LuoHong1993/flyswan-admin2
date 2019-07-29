@@ -1,4 +1,5 @@
 import Ajax from './ajax';
+import loginAjax from './loginAjax';
 
 const Request = {
   User: {
@@ -34,10 +35,10 @@ const Request = {
   },
   Login: {
     login (param) {
-      return Ajax.post('/authentication/from', param);
+      return loginAjax.post('/authentication/from', param);
     },
     logout (param) {
-      return Ajax.post('/logout', param);
+      return loginAjax.post('/logout', param);
     }
   },
   Menu: {

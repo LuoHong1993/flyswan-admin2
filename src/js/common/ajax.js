@@ -79,8 +79,7 @@ let ajax = {
     }
     let header = {
       author: this.Author,
-      Authorizations: 'Basic dGVzdDp0ZXN0MTIzNA==',
-      Authorization: Utils.getLocal('token')
+      Authorization: 'bearer ' + Utils.getLocal('token')
     };
     let defaultParam = {
       headers: header,

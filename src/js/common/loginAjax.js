@@ -79,8 +79,7 @@ let loginAjax = {
     }
     let header = {
       author: this.Author,
-      Authorizations: 'Basic dGVzdDp0ZXN0MTIzNA==',
-      Authorization: Utils.getLocal('token')
+      Authorization: 'Basic b2F1dGgtYWRtaW4tY2xpZW50LWlkOjZiODU1MGU2OGJhNzkyYjRmZmQzOTQxOTY3Y2E5ZDlj'
     };
     let defaultParam = {
       headers: header,

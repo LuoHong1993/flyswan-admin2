@@ -97,17 +97,38 @@ let ajax = {
     let that = this;
     params = Utils.extend({}, defaultParam, params);
     return new Promise((resolve) => {
-      return axios.request(params).then((response) => {
+      return axios.request(params).then(async (response) => {
         that.deleteRequest(params.url);
         let data = response.data;
         let status = response.status;
-        // 如果后端统一封装返回，即所有的请求都是200, 错误码由返回结果提供，则使用以下代码获取状态
-        // if (status == 200) {
-        //   status = data.status;
-        // }
         if (status !== 200) {
           if (status === 401) {
-            window.top.location = '/login';
+            var newParams = params;
+            newParams.headers.Authorization = 'Basic b2F1dGgtYWRtaW4tY2xpZW50LWlkOjZiODU1MGU2OGJhNzkyYjRmZmQzOTQxOTY3Y2E5ZDlj';
+            newParams.url = '/oauth/token';
+            newParams.method = 'POST';
+            newParams.data = 'grant_type=refresh_token&refresh_token=' + Utils.getLocal('refreshToken');
+            let resp = null;
+            try {
+              resp = await axios.request(newParams);
+            } catch (e) {
+              window.top.location = '/login';
+              return;
+            }
+            let ndata = resp.data;
+            let nstatus = resp.status;
+            if (nstatus === 401) {
+              window.top.location = '/login';
+              return;
+            }
+            let accessToken = ndata.access_token;
+            let refreshToken = ndata.refresh_token;
+            Utils.saveLocal('token', accessToken);
+            Utils.saveLocal('refreshToken', refreshToken);
+            response.config.headers.Authorization = 'bearer ' + accessToken;
+            let resp2 = await axios.request(response.config);
+            resp2.data.ok = true;
+            resolve(resp2.data);
             return;
           }
           if (status === 500) {
@@ -117,9 +138,12 @@ let ajax = {
           } else if (status !== 200) {
             HeyUI.$Message.error(data._msg || '请求异常');
           }
+          data.ok = false;
+          resolve(data);
+        } else {
+          data.ok = true;
+          resolve(data);
         }
-        data.ok = true;
-        resolve(data);
       }).catch(() => {
         that.deleteRequest(params.url);
         resolve({

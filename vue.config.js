@@ -46,6 +46,10 @@ module.exports = {
       '/api': {
         target: 'http://192.168.30.15:1111'
         // target: 'http://192.168.0.123:1111'
+      },
+      '/oauth': {
+        target: 'http://192.168.30.15:1111'
+        // target: 'http://192.168.0.123:1111'
       }
     }
   }

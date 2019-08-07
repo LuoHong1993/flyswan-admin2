@@ -105,24 +105,33 @@ let ajax = {
           if (status === 401) {
             var newParams = params;
             newParams.headers.Authorization = 'Basic b2F1dGgtYWRtaW4tY2xpZW50LWlkOjZiODU1MGU2OGJhNzkyYjRmZmQzOTQxOTY3Y2E5ZDlj';
-            newParams.url = '/oauth/token';
+            newParams.url = '/api/authentication/refreshToken';
             newParams.method = 'POST';
             newParams.data = 'grant_type=refresh_token&refresh_token=' + Utils.getLocal('refreshToken');
             let resp = null;
             try {
               resp = await axios.request(newParams);
+              if (resp.status !== 200) {
+                Utils.saveLocal('token', '');
+                Utils.saveLocal('refreshToken', '');
+                window.top.location = '/login';
+                return;
+              }
             } catch (e) {
+              Utils.saveLocal('token', '');
+              Utils.saveLocal('refreshToken', '');
               window.top.location = '/login';
               return;
             }
             let ndata = resp.data;
-            let nstatus = resp.status;
-            if (nstatus === 401) {
+            if (ndata.code !== 0) {
+              Utils.saveLocal('token', '');
+              Utils.saveLocal('refreshToken', '');
               window.top.location = '/login';
               return;
             }
-            let accessToken = ndata.access_token;
-            let refreshToken = ndata.refresh_token;
+            let accessToken = ndata.data.access_token;
+            let refreshToken = ndata.data.refresh_token;
             Utils.saveLocal('token', accessToken);
             Utils.saveLocal('refreshToken', refreshToken);
             response.config.headers.Authorization = 'bearer ' + accessToken;

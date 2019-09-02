@@ -4,6 +4,7 @@ WORKDIR /flyswan-admin-ui
 COPY . .
 RUN npm install
 RUN npm run build
+RUN rm -f /node_modules
 
 FROM nginx:1.14.2
 MAINTAINER luohong <luohong_studio@163.com>

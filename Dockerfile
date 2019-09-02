@@ -3,4 +3,6 @@ MAINTAINER luohong <luohong_studio@163.com>
 ENV TZ="Asia/Shanghai"
 WORKDIR /app
 COPY . .
-RUN npm install && npm run build && cp -r dist/* /data/projects/flyswan-admin-ui/dist && rm -rf /app
+RUN npm install
+RUN npm run build
+RUN cp -r dist/* /data/projects/flyswan-admin-ui/dist

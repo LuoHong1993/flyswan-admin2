@@ -11,6 +11,6 @@ MAINTAINER luohong <luohong_studio@163.com>
 ENV TZ="Asia/Shanghai"
 VOLUME /tmp
 WORKDIR /flyswan-admin-ui
-COPY --from=builder /flyswan-admin-ui/dist .
+COPY --from=builder /flyswan-admin-ui/dist/ .
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 4001

@@ -1,10 +1,9 @@
 FROM node:8.16.1 as builder
 MAINTAINER luohong <luohong_studio@163.com>
+WORKDIR /flyswan-admin-ui
+COPY . .
 RUN npm install
 RUN npm run build
-WORKDIR /flyswan-admin-ui
-COPY ./dist /flyswan-admin-ui
-COPY nginx.conf /flyswan-admin-ui
 
 FROM nginx:1.14.2
 MAINTAINER luohong <luohong_studio@163.com>

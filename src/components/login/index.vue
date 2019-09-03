@@ -103,7 +103,7 @@
   <div class="login-vue">
     <div class="login-container">
       <div class="login-content">
-        <div class="login-title">管理系统</div>
+        <div class="login-title">管理系统2</div>
         <div class="login-name login-input">
           <input type="text" name="username" v-model="login.username" autocomplete="off"/>
           <span class="placeholder" :class="{fixed: login.username != '' && login.username != null}">用户名</span>
